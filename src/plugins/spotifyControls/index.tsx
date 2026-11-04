@@ -26,6 +26,12 @@ import hoverOnlyStyle from "./hoverOnly.css?managed";
 import { Player } from "./PlayerComponent";
 
 export const settings = definePluginSettings({
+    showMusicSearch: {
+        description: "Show a compact music search above the Spotify player",
+        type: OptionType.BOOLEAN,
+        default: true,
+        restartNeeded: true
+    },
     hoverControls: {
         description: "Show controls on hover",
         type: OptionType.BOOLEAN,
@@ -51,6 +57,7 @@ function toggleHoverControls(value: boolean) {
 export default definePlugin({
     name: "SpotifyControls",
     description: "Adds a Spotify player above the account panel",
+    enabledByDefault: true,
     tags: ["Media", "Activity"],
     authors: [Devs.Ven, Devs.afn, Devs.KraXen72, Devs.Av32000, Devs.nin0dev],
     settings,

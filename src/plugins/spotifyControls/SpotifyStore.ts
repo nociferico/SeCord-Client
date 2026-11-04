@@ -46,6 +46,19 @@ export interface Track {
     }[];
 }
 
+export interface SearchTrack {
+    id: string;
+    name: string;
+    uri: string;
+    artists: { name: string; }[];
+    album: { images?: { url: string; }[]; };
+}
+
+export interface SearchResult {
+    items: SearchTrack[];
+    total: number;
+}
+
 interface PlayerState {
     accountId: string;
     track: Track | null;
@@ -165,6 +178,23 @@ export const SpotifyStore = proxyLazyWebpack(() => {
                 console.error("[VencordSpotifyControls] Failed to seek", e);
                 this.isSettingPosition = false;
             });
+        }
+
+        async searchTracks(query: string, offset = 0): Promise<SearchResult> {
+            const { socket } = SpotifySocket.getActiveSocketAndDevice();
+            if (!socket?.accessToken) throw new Error("Conecte o Spotify ao Discord para buscar músicas.");
+
+            const response = await SpotifyAPI.get(socket.accountId, socket.accessToken, {
+                url: "https://api.spotify.com/v1/search",
+                query: { q: query.trim(), type: "track", limit: 10, offset }
+            });
+            const tracks = response?.body?.tracks ?? response?.tracks;
+            if (!Array.isArray(tracks?.items)) throw new Error("O Spotify não retornou resultados de busca.");
+            return { items: tracks.items, total: tracks.total ?? 0 };
+        }
+
+        playTrack(uri: string) {
+            return this._req("put", "/play", { body: { uris: [uri] } });
         }
 
         _req(method: "post" | "get" | "put", route: string, data: any = {}) {

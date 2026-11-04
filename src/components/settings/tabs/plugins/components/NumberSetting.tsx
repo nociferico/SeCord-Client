@@ -20,6 +20,7 @@ import { isSettingDisabled } from "@api/PluginManager";
 import { OptionType, PluginSettingBigIntDef, PluginSettingNumberDef } from "@utils/types";
 import { React, TextInput, useState } from "@webpack/common";
 
+import { ptBR } from "../../../../../nocicord/ptBR";
 import { resolveError, SettingProps, SettingsSection } from "./Common";
 
 const MAX_SAFE_NUMBER = BigInt(Number.MAX_SAFE_INTEGER);
@@ -54,7 +55,7 @@ export function NumberSetting({ setting, pluginSettings, definedSettings, id, on
             <TextInput
                 type="number"
                 pattern="-?[0-9]+"
-                placeholder={setting.placeholder ?? "Enter a number"}
+                placeholder={ptBR(setting.placeholder ?? "Digite um número")}
                 value={state}
                 onChange={handleChange}
                 disabled={isSettingDisabled(definedSettings, setting)}

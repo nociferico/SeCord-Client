@@ -11,6 +11,8 @@ import { wordsFromCamel, wordsToTitle } from "@utils/text";
 import { DefinedSettings, PluginSettingDefCommon } from "@utils/types";
 import { PropsWithChildren } from "react";
 
+import { ptBR } from "../../../../../nocicord/ptBR";
+
 export const cl = classNameFactory("vc-plugins-setting-");
 
 interface SettingBaseProps<T> {
@@ -31,7 +33,7 @@ export type ComponentSettingProps<T extends Omit<PluginSettingDefCommon, "descri
 export function resolveError(isValidResult: boolean | string) {
     if (typeof isValidResult === "string") return isValidResult;
 
-    return isValidResult ? null : "Invalid input provided";
+    return isValidResult ? null : "Valor inválido";
 }
 
 interface SettingsSectionProps extends PropsWithChildren {
@@ -48,8 +50,8 @@ export function SettingsSection({ tag: Tag = "div", name, id, description, error
         <Tag className={cl("section")}>
             <div className={classes(cl("content"), inlineSetting && cl("inline"))}>
                 <div className={cl("label")}>
-                    <Paragraph size="md" weight="medium" className={cl("title")}>{name ?? wordsToTitle(wordsFromCamel(id))}</Paragraph>
-                    {description && <Paragraph className={cl("description")}>{description}</Paragraph>}
+                    <Paragraph size="md" weight="medium" className={cl("title")}>{ptBR(name ?? wordsToTitle(wordsFromCamel(id)))}</Paragraph>
+                    {description && <Paragraph className={cl("description")}>{ptBR(description)}</Paragraph>}
                 </div>
                 {children}
             </div>

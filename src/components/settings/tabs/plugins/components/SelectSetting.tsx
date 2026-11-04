@@ -20,6 +20,7 @@ import { isSettingDisabled } from "@api/PluginManager";
 import { PluginSettingSelectDef } from "@utils/types";
 import { React, Select, useState } from "@webpack/common";
 
+import { ptBR } from "../../../../../nocicord/ptBR";
 import { resolveError, SettingProps, SettingsSection } from "./Common";
 
 export function SelectSetting({ setting, pluginSettings, definedSettings, onChange, id }: SettingProps<PluginSettingSelectDef>) {
@@ -42,8 +43,8 @@ export function SelectSetting({ setting, pluginSettings, definedSettings, onChan
     return (
         <SettingsSection name={setting.displayName} id={id} description={setting.description} error={error}>
             <Select
-                placeholder={setting.placeholder ?? "Select an option"}
-                options={setting.options}
+                placeholder={ptBR(setting.placeholder ?? "Selecione uma opção")}
+                options={setting.options?.map(option => ({ ...option, label: ptBR(option.label) }))}
                 maxVisibleItems={5}
                 closeOnSelect={true}
                 select={handleChange}

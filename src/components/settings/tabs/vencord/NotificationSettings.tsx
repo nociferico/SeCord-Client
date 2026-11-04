@@ -18,17 +18,16 @@ import { Modal, openModal, Select, Slider } from "@webpack/common";
 export function NotificationSection() {
     return (
         <section className={Margins.top16}>
-            <Heading className={Margins.bottom8}>Notifications</Heading>
+            <Heading className={Margins.bottom8}>Avisos</Heading>
             <Paragraph className={Margins.bottom8}>
-                Settings for Notifications sent by Vencord.
-                This does NOT include Discord notifications (messages, etc)
+                Avisos de extensões do SeCord. Mensagens e menções do Discord têm ajustes próprios.
             </Paragraph>
             <Flex>
                 <Button onClick={openNotificationSettingsModal}>
-                    Notification Settings
+                    Ajustar avisos
                 </Button>
                 <Button onClick={openNotificationLogModal}>
-                    View Notification Log
+                    Histórico de avisos
                 </Button>
             </Flex>
         </section>
@@ -40,7 +39,7 @@ export function openNotificationSettingsModal() {
         <Modal
             {...props}
             size="lg"
-            title="Notification Settings"
+            title="Avisos do SeCord"
         >
             <NotificationSettings />
         </Modal>
@@ -52,7 +51,7 @@ function NotificationSettings() {
 
     return (
         <>
-            <Heading className={Margins.bottom8}>Notification Style</Heading>
+            <Heading className={Margins.bottom8}>Tipo de aviso</Heading>
             {settings.useNative !== "never" && Notification?.permission === "denied" && (
                 <ErrorCard style={{ padding: "1em" }} className={Margins.bottom8}>
                     <Heading className={Margins.bottom8}>Desktop Notification Permission denied</Heading>
@@ -62,16 +61,16 @@ function NotificationSettings() {
             <Paragraph className={Margins.bottom8}>
                 Some plugins may show you notifications. These come in two styles:
                 <ul>
-                    <li><strong>Vencord Notifications</strong>: These are in-app notifications</li>
+                    <li><strong>Avisos do SeCord</strong>: aparecem dentro do aplicativo</li>
                     <li><strong>Desktop Notifications</strong>: Native Desktop notifications (like when you get a ping)</li>
                 </ul>
             </Paragraph>
             <Select
-                placeholder="Notification Style"
+                placeholder="Tipo de aviso"
                 options={[
                     { label: "Only use Desktop notifications when Discord is not focused", value: "not-focused", default: true },
                     { label: "Always use Desktop notifications", value: "always" },
-                    { label: "Always use Vencord notifications", value: "never" },
+                    { label: "Sempre usar avisos no aplicativo", value: "never" },
                 ] satisfies Array<{ value: typeof settings["useNative"]; } & Record<string, any>>}
                 closeOnSelect={true}
                 select={v => settings.useNative = v}

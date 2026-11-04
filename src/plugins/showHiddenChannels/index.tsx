@@ -566,7 +566,7 @@ export default definePlugin({
     ), { noop: true }),
 
     HiddenChannelIcon: ErrorBoundary.wrap(() => (
-        <Tooltip text="Hidden Channel">
+        <Tooltip text="Canal oculto">
             {({ onMouseLeave, onMouseEnter }) => (
                 <svg
                     onMouseLeave={onMouseLeave}

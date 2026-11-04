@@ -76,26 +76,26 @@ const EmojiParser = findByPropsLazy("convertSurrogateToName");
 const EmojiUtils = findByPropsLazy("getURL", "getEmojiColors");
 
 const ChannelTypesToChannelNames = {
-    [ChannelTypes.GUILD_TEXT]: "text",
-    [ChannelTypes.GUILD_ANNOUNCEMENT]: "announcement",
-    [ChannelTypes.GUILD_FORUM]: "forum",
-    [ChannelTypes.GUILD_VOICE]: "voice",
-    [ChannelTypes.GUILD_STAGE_VOICE]: "stage"
+    [ChannelTypes.GUILD_TEXT]: "texto",
+    [ChannelTypes.GUILD_ANNOUNCEMENT]: "anúncios",
+    [ChannelTypes.GUILD_FORUM]: "fórum",
+    [ChannelTypes.GUILD_VOICE]: "voz",
+    [ChannelTypes.GUILD_STAGE_VOICE]: "palco"
 };
 
 const SortOrderTypesToNames = {
-    [SortOrderTypes.LATEST_ACTIVITY]: "Latest activity",
-    [SortOrderTypes.CREATION_DATE]: "Creation date"
+    [SortOrderTypes.LATEST_ACTIVITY]: "Atividade recente",
+    [SortOrderTypes.CREATION_DATE]: "Data de criação"
 };
 
 const ForumLayoutTypesToNames = {
-    [ForumLayoutTypes.DEFAULT]: "Not set",
-    [ForumLayoutTypes.LIST]: "List view",
-    [ForumLayoutTypes.GRID]: "Gallery view"
+    [ForumLayoutTypes.DEFAULT]: "Não definido",
+    [ForumLayoutTypes.LIST]: "Lista",
+    [ForumLayoutTypes.GRID]: "Galeria"
 };
 
 const VideoQualityModesToNames = {
-    [VideoQualityModes.AUTO]: "Automatic",
+    [VideoQualityModes.AUTO]: "Automática",
     [VideoQualityModes.FULL]: "720p"
 };
 
@@ -162,7 +162,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                 <img className={cl("logo")} src={HiddenChannelLogo} />
 
                 <div className={cl("heading-container")}>
-                    <Heading tag="h1" size="xxl">This is a {!PermissionStore.can(PermissionsBits.VIEW_CHANNEL, channel) ? "hidden" : "locked"} {ChannelTypesToChannelNames[type]} channel</Heading>
+                    <Heading tag="h1" size="xxl">Canal de {ChannelTypesToChannelNames[type]} {!PermissionStore.can(PermissionsBits.VIEW_CHANNEL, channel) ? "oculto" : "bloqueado"}</Heading>
                     {channel.isNSFW() &&
                         <Tooltip text="NSFW">
                             {({ onMouseLeave, onMouseEnter }) => (
@@ -185,8 +185,8 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
 
                 {(!channel.isGuildVoice() && !channel.isGuildStageVoice()) && (
                     <Paragraph size="lg">
-                        You can not see the {channel.isForumChannel() ? "posts" : "messages"} of this channel.
-                        {channel.isForumChannel() && topic && topic.length > 0 && " However you may see its guidelines:"}
+                        Você não tem acesso às {channel.isForumChannel() ? "publicações" : "mensagens"} deste canal.
+                        {channel.isForumChannel() && topic && topic.length > 0 && " Você pode ver as regras do fórum:"}
                     </Paragraph>
                 )}
 
@@ -198,45 +198,45 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
 
                 {lastMessageId &&
                     <Paragraph size="md">
-                        Last {channel.isForumChannel() ? "post" : "message"} created:
+                        Última {channel.isForumChannel() ? "publicação" : "mensagem"} criada:
                         <Timestamp timestamp={new Date(SnowflakeUtils.extractTimestamp(lastMessageId))} />
                     </Paragraph>
                 }
                 {lastPinTimestamp &&
-                    <Paragraph size="md">Last message pin: <Timestamp timestamp={new Date(lastPinTimestamp)} /></Paragraph>
+                    <Paragraph size="md">Última mensagem fixada: <Timestamp timestamp={new Date(lastPinTimestamp)} /></Paragraph>
                 }
                 {(rateLimitPerUser ?? 0) > 0 &&
-                    <Paragraph size="md">Slowmode: {formatDurationVerbose(rateLimitPerUser!, "seconds")}</Paragraph>
+                    <Paragraph size="md">Modo lento: {formatDurationVerbose(rateLimitPerUser!, "seconds")}</Paragraph>
                 }
                 {(defaultThreadRateLimitPerUser ?? 0) > 0 &&
                     <Paragraph size="md">
-                        Default thread slowmode: {formatDurationVerbose(defaultThreadRateLimitPerUser!, "seconds")}
+                        Modo lento padrão dos tópicos: {formatDurationVerbose(defaultThreadRateLimitPerUser!, "seconds")}
                     </Paragraph>
                 }
                 {((channel.isGuildVoice() || channel.isGuildStageVoice()) && bitrate != null) &&
-                    <Paragraph size="md">Bitrate: {bitrate} bits</Paragraph>
+                    <Paragraph size="md">Taxa de bits: {bitrate} bits</Paragraph>
                 }
                 {rtcRegion !== undefined &&
-                    <Paragraph size="md">Region: {rtcRegion ?? "Automatic"}</Paragraph>
+                    <Paragraph size="md">Região: {rtcRegion ?? "Automática"}</Paragraph>
                 }
                 {(channel.isGuildVoice() || channel.isGuildStageVoice()) &&
-                    <Paragraph size="md">Video quality mode: {VideoQualityModesToNames[videoQualityMode ?? VideoQualityModes.AUTO]}</Paragraph>
+                    <Paragraph size="md">Qualidade do vídeo: {VideoQualityModesToNames[videoQualityMode ?? VideoQualityModes.AUTO]}</Paragraph>
                 }
                 {(defaultAutoArchiveDuration ?? 0) > 0 &&
                     <Paragraph size="md">
-                        Default inactivity duration before archiving {channel.isForumChannel() ? "posts" : "threads"}:
+                        Tempo padrão sem atividade antes de arquivar {channel.isForumChannel() ? "publicações" : "tópicos"}:
                         {" " + formatDurationVerbose(defaultAutoArchiveDuration!, "minutes")}
                     </Paragraph>
                 }
                 {defaultForumLayout != null &&
-                    <Paragraph size="md">Default layout: {ForumLayoutTypesToNames[defaultForumLayout]}</Paragraph>
+                    <Paragraph size="md">Layout padrão: {ForumLayoutTypesToNames[defaultForumLayout]}</Paragraph>
                 }
                 {defaultSortOrder != null &&
-                    <Paragraph size="md">Default sort order: {SortOrderTypesToNames[defaultSortOrder]}</Paragraph>
+                    <Paragraph size="md">Ordenação padrão: {SortOrderTypesToNames[defaultSortOrder]}</Paragraph>
                 }
                 {defaultReactionEmoji != null &&
                     <div className={cl("default-emoji-container")}>
-                        <Paragraph size="md">Default reaction emoji:</Paragraph>
+                        <Paragraph size="md">Emoji de reação padrão:</Paragraph>
                         {Parser.defaultRules[defaultReactionEmoji.emojiName ? "emoji" : "customEmoji"].react({
                             name: defaultReactionEmoji.emojiName
                                 ? EmojiParser.convertSurrogateToName(defaultReactionEmoji.emojiName)
@@ -250,11 +250,11 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                     </div>
                 }
                 {channel.hasFlag(ChannelFlags.REQUIRE_TAG) &&
-                    <Paragraph size="md">Posts on this forum require a tag to be set.</Paragraph>
+                    <Paragraph size="md">As publicações deste fórum exigem uma tag.</Paragraph>
                 }
                 {availableTags && availableTags.length > 0 &&
                     <div className={cl("tags-container")}>
-                        <Heading tag="h2">Available tags:</Heading>
+                        <Heading tag="h2">Tags disponíveis:</Heading>
                         <div className={cl("tags")}>
                             {availableTags.map(tag => <TagComponent tag={tag} key={tag.id} />)}
                         </div>
@@ -263,7 +263,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                 <div className={cl("allowed-users-and-roles-container")}>
                     <div className={cl("allowed-users-and-roles-container-title")}>
                         {isPluginEnabled(PermissionsViewerPlugin.name) && (
-                            <Tooltip text="Permission Details">
+                            <Tooltip text="Detalhes das permissões">
                                 {({ onMouseLeave, onMouseEnter }) => (
                                     <button
                                         onMouseLeave={onMouseLeave}
@@ -282,8 +282,8 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
                                 )}
                             </Tooltip>
                         )}
-                        <Heading tag="h2">Allowed users and roles:</Heading>
-                        <Tooltip text={defaultAllowedUsersAndRolesDropdownState ? "Hide Allowed Users and Roles" : "View Allowed Users and Roles"}>
+                        <Heading tag="h2">Usuários e cargos autorizados:</Heading>
+                        <Tooltip text={defaultAllowedUsersAndRolesDropdownState ? "Ocultar usuários e cargos autorizados" : "Mostrar usuários e cargos autorizados"}>
                             {({ onMouseLeave, onMouseEnter }) => (
                                 <button
                                     onMouseLeave={onMouseLeave}

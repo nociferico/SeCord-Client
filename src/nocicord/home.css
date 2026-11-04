@@ -1,0 +1,313 @@
+.vc-nocicord-home {
+    --noci-ink: #191820;
+    --noci-paper: #f0eaf0;
+    --noci-muted: #aaa4b1;
+    --noci-rule: #48434d;
+    --noci-accent: var(--nocicord-accent, #b66b8b);
+
+    display: grid;
+    gap: 0;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border: 1px solid var(--noci-rule);
+    border-radius: 5px;
+    background: var(--noci-ink);
+    color: var(--noci-paper);
+    font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
+}
+
+.vc-nocicord-masthead {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 18px;
+    min-height: 158px;
+    padding: 28px 30px;
+    border-bottom: 1px solid var(--noci-rule);
+    background: linear-gradient(115deg, #23202a 0%, var(--noci-ink) 72%);
+}
+
+.vc-nocicord-mark {
+    width: 88px;
+    height: 88px;
+    object-fit: contain;
+}
+
+.vc-nocicord-title-block h1 {
+    margin: 0;
+    color: var(--noci-paper);
+    font-family: Bahnschrift, "Segoe UI Variable", sans-serif;
+    font-size: clamp(33px, 5vw, 52px);
+    font-weight: 700;
+    letter-spacing: -0.07em;
+    line-height: 1;
+}
+
+.vc-nocicord-title-block p {
+    margin: 12px 0 0;
+    color: var(--noci-muted);
+    font-size: 15px;
+}
+
+.vc-nocicord-title-block .vc-nocicord-subtitle {
+    margin-top: 2px;
+    color: var(--noci-paper);
+    font-size: 14px;
+    opacity: .55;
+}
+
+.vc-nocicord-edition {
+    align-self: start;
+    color: var(--noci-muted);
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: right;
+}
+
+.vc-nocicord-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.vc-nocicord-module {
+    min-width: 0;
+    padding: 26px 30px 30px;
+}
+
+.vc-nocicord-profiles {
+    border-right: 1px solid var(--noci-rule);
+}
+
+.vc-nocicord-module-title {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.vc-nocicord-module-title h2 {
+    margin: 0;
+    color: var(--noci-paper);
+    font-family: Bahnschrift, "Segoe UI Variable", sans-serif;
+    font-size: 23px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+}
+
+.vc-nocicord-module > p {
+    max-width: 38ch;
+    min-height: 56px;
+    margin: 0 0 18px;
+    color: var(--noci-muted);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.vc-nocicord-profile-list {
+    border-top: 1px solid var(--noci-rule);
+}
+
+.vc-nocicord-profile {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    padding: 13px 4px;
+    border: 0;
+    border-bottom: 1px solid var(--noci-rule);
+    background: transparent;
+    color: var(--noci-paper);
+    cursor: pointer;
+    text-align: left;
+}
+
+.vc-nocicord-profile:hover,
+.vc-nocicord-profile[aria-pressed="true"] {
+    background: color-mix(in srgb, var(--noci-accent) 9%, transparent);
+}
+
+.vc-nocicord-profile-indicator {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    margin-top: 2px;
+    border: 1px solid var(--noci-muted);
+    border-radius: 50%;
+}
+
+.vc-nocicord-profile[aria-pressed="true"] .vc-nocicord-profile-indicator {
+    border: 4px solid var(--noci-accent);
+}
+
+.vc-nocicord-profile-copy {
+    display: grid;
+    gap: 3px;
+}
+
+.vc-nocicord-profile-copy strong {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.vc-nocicord-profile-copy small {
+    color: var(--noci-muted);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.vc-nocicord-color-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 4px 0 20px;
+}
+
+.vc-nocicord-color {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 9px;
+    border: 1px solid var(--noci-rule);
+    border-radius: 3px;
+    background: transparent;
+    color: var(--noci-paper);
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.vc-nocicord-color[aria-pressed="true"] {
+    border-color: var(--noci-accent);
+}
+
+.vc-nocicord-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.vc-nocicord-switches {
+    border-top: 1px solid var(--noci-rule);
+}
+
+.vc-nocicord-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    width: 100%;
+    padding: 12px 2px;
+    border: 0;
+    border-bottom: 1px solid var(--noci-rule);
+    background: transparent;
+    color: var(--noci-paper);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    text-align: left;
+}
+
+.vc-nocicord-toggle small {
+    display: block;
+    margin-top: 2px;
+    color: var(--noci-muted);
+    font-size: 11px;
+}
+
+.vc-nocicord-toggle-track {
+    position: relative;
+    flex: none;
+    width: 33px;
+    height: 19px;
+    border-radius: 20px;
+    background: var(--noci-rule);
+}
+
+.vc-nocicord-toggle-track::after {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #fff;
+    content: "";
+    transition: left 120ms ease;
+}
+
+.vc-nocicord-toggle[aria-checked="true"] .vc-nocicord-toggle-track {
+    background: var(--noci-accent);
+}
+
+.vc-nocicord-toggle[aria-checked="true"] .vc-nocicord-toggle-track::after {
+    left: 17px;
+}
+
+.vc-nocicord-voice {
+    padding: 22px 30px;
+    border-top: 1px solid var(--noci-rule);
+    background: #211f29;
+}
+
+.vc-nocicord-voice-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.vc-nocicord-voice-grid p {
+    margin: 0;
+    color: var(--noci-muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.vc-nocicord-voice-grid strong {
+    color: var(--noci-paper);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.vc-nocicord-credit {
+    padding: 12px 30px;
+    border-top: 1px solid var(--noci-rule);
+    color: var(--noci-muted);
+    font-size: 11px;
+}
+
+.vc-nocicord-home button:focus-visible {
+    outline: 2px solid var(--noci-accent);
+    outline-offset: -2px;
+}
+
+@media (width <= 680px) {
+    .vc-nocicord-masthead {
+        grid-template-columns: 58px minmax(0, 1fr);
+        gap: 12px;
+        padding: 22px;
+    }
+
+    .vc-nocicord-mark {
+        width: 55px;
+        height: 55px;
+        font-size: 31px;
+    }
+
+    .vc-nocicord-edition {
+        display: none;
+    }
+
+    .vc-nocicord-layout,
+    .vc-nocicord-voice-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vc-nocicord-profiles {
+        border-right: 0;
+        border-bottom: 1px solid var(--noci-rule);
+    }
+
+    .vc-nocicord-module,
+    .vc-nocicord-voice {
+        padding: 22px;
+    }
+}

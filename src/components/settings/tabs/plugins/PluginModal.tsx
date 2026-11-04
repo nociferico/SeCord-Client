@@ -38,6 +38,7 @@ import { Constructor } from "type-fest";
 
 import { PluginMeta } from "~plugins";
 
+import { ptBR } from "../../../../nocicord/ptBR";
 import { OptionComponentMap } from "./components";
 import { openContributorModal } from "./ContributorModal";
 import { FavoriteButton, GithubButton, WebsiteButton } from "./PluginModalButtons";
@@ -73,7 +74,7 @@ function PluginTags({ tags }: { tags: PluginTag[]; }) {
     return (
         <div className={cl("tags")}>
             {tags.map(tag => (
-                <div key={tag} className={cl("tag")}>{tag}</div>
+                <div key={tag} className={cl("tag")}>{ptBR(tag)}</div>
             ))}
         </div>
     );
@@ -84,7 +85,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
     const hasSettings = hasAnyVisibleSettings(plugin);
 
     // avoid layout shift by showing dummy users while loading users
-    const fallbackAuthors = useMemo(() => [makeDummyUser({ username: "Loading...", id: "-1465912127305809920" })], []);
+    const fallbackAuthors = useMemo(() => [makeDummyUser({ username: "Carregando...", id: "-1465912127305809920" })], []);
     const [authors, setAuthors] = useState<Partial<User>[]>([]);
 
     useEffect(() => {
@@ -107,7 +108,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
     function renderSettings() {
         const { settings } = plugin;
         if (!hasSettings || !settings)
-            return <Paragraph>There are no settings for this plugin.</Paragraph>;
+            return <Paragraph>Esta extensão não tem ajustes adicionais.</Paragraph>;
 
         const options = Object.entries(settings.def).map(([key, setting]) => {
             if (setting.type === OptionType.CUSTOM) return null;
@@ -182,11 +183,11 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                                 onClick={() => pluginSettings.isFavorite = !pluginSettings.isFavorite}
                             />
                             <WebsiteButton
-                                text="View more info"
+                                text="Mais informações"
                                 href={`https://vencord.dev/plugins/${plugin.name}`}
                             />
                             <GithubButton
-                                text="View source code"
+                                text="Ver código-fonte"
                                 href={`https://github.com/${gitRemote}/tree/main/src/plugins/${pluginMeta.folderName}`}
                             />
                         </div>
@@ -196,7 +197,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             subtitle={
                 <div className={cl("info")}>
                     <div>
-                        <Paragraph>{plugin.description}</Paragraph>
+                        <Paragraph>{ptBR(plugin.description)}</Paragraph>
                         {!!plugin.tags?.length && <PluginTags tags={plugin.tags} />}
                     </div>
                 </div>
@@ -204,7 +205,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
         >
             <div className={"vc-settings-modal-content"}>
                 <section>
-                    <Heading tag="h3" className={classes(Margins.top8, Margins.bottom8)}>Authors</Heading>
+                    <Heading tag="h3" className={classes(Margins.top8, Margins.bottom8)}>Autores</Heading>
                     <div style={{ width: "fit-content" }}>
                         <ErrorBoundary noop>
                             <UserSummaryItem
@@ -243,7 +244,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 )}
 
                 <section>
-                    <Heading tag="h3" className={classes(Margins.top16, Margins.bottom8)}>Settings</Heading>
+                    <Heading tag="h3" className={classes(Margins.top16, Margins.bottom8)}>Ajustes</Heading>
                     {renderSettings()}
                 </section>
             </div>

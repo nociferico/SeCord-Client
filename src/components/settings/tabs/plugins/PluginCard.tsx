@@ -7,11 +7,12 @@
 import { showNotice } from "@api/Notices";
 import { hasAnyVisibleSettings, isPluginEnabled, pluginRequiresRestart, startDependenciesRecursive, startPlugin, stopPlugin } from "@api/PluginManager";
 import { Settings } from "@api/Settings";
-import { CogWheel, InfoIcon } from "@components/Icons";
+import { CogWheel, InfoIcon, StarFilled, StarOutlined } from "@components/Icons";
 import { AddonCard } from "@components/settings/AddonCard";
 import { Plugin } from "@utils/types";
 import { React, showToast } from "@webpack/common";
 
+import { ptBR } from "../../../../nocicord/ptBR";
 import { cl, logger } from ".";
 import { openPluginModal } from "./PluginModal";
 
@@ -78,7 +79,7 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
     return (
         <AddonCard
             name={plugin.name}
-            description={plugin.description}
+            description={ptBR(plugin.description)}
             isNew={isNew}
             enabled={isEnabled()}
             setEnabled={toggleEnabled}
@@ -86,16 +87,29 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             infoButton={
-                <button
-                    role="switch"
-                    onClick={() => openPluginModal(plugin, onRestartNeeded)}
-                    className={cl("info-button")}
-                >
-                    {hasAnyVisibleSettings(plugin)
-                        ? <CogWheel className={cl("info-icon")} />
-                        : <InfoIcon className={cl("info-icon")} />
-                    }
-                </button>
+                <div className={cl("actions")}>
+                    {!disabled && <button
+                        type="button"
+                        className={cl("favorite-button")}
+                        aria-label={settings.isFavorite ? `Desfavoritar ${plugin.name}` : `Favoritar ${plugin.name}`}
+                        aria-pressed={settings.isFavorite ?? false}
+                        title={settings.isFavorite ? "Remover dos favoritos" : "Fixar nos favoritos"}
+                        onClick={() => settings.isFavorite = !settings.isFavorite}
+                    >
+                        {settings.isFavorite ? <StarFilled /> : <StarOutlined />}
+                    </button>}
+                    <button
+                        type="button"
+                        aria-label={`Ajustes de ${plugin.name}`}
+                        onClick={() => openPluginModal(plugin, onRestartNeeded)}
+                        className={cl("info-button")}
+                    >
+                        {hasAnyVisibleSettings(plugin)
+                            ? <CogWheel className={cl("info-icon")} />
+                            : <InfoIcon className={cl("info-icon")} />
+                        }
+                    </button>
+                </div>
             } />
     );
 }

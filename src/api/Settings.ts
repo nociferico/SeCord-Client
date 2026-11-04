@@ -38,6 +38,12 @@ export type SettingsPluginUiElements = {
 };
 
 export interface Settings {
+    nocicord: {
+        profile: "essential" | "balanced" | "expressive" | "custom";
+        accent: "violet" | "rose" | "cyan";
+        compact: boolean;
+        reducedMotion: boolean;
+    };
     autoUpdate: boolean;
     autoUpdateNotification: boolean,
     useQuickCss: boolean;
@@ -94,6 +100,12 @@ export interface Settings {
 }
 
 const DefaultSettings: Settings = {
+    nocicord: {
+        profile: "balanced",
+        accent: "rose",
+        compact: false,
+        reducedMotion: false
+    },
     autoUpdate: true,
     autoUpdateNotification: true,
     useQuickCss: true,

@@ -43,11 +43,28 @@ import { JSX } from "react";
 
 import Plugins, { ExcludedPlugins, PluginMeta } from "~plugins";
 
+import { ptBR } from "../../../../nocicord/ptBR";
 import { PluginCard } from "./PluginCard";
 import { UIElementsButton } from "./UIElements";
 
 export const cl = classNameFactory("vc-plugins-");
 export const logger = new Logger("PluginSettings", "#a6d189");
+
+const recommendedPlugins = [
+    "MessageLogger",
+    "ShowHiddenChannels",
+    "FakeNitro",
+    "SpotifyControls",
+    "BetterGifPicker",
+    "BetterFolders",
+    "ClearURLs",
+    "Translate",
+    "FavoriteEmojiFirst",
+    "SilentMessageToggle",
+    "ReadAllNotificationsButton",
+    "VolumeBooster"
+] as const;
+const recommendationRank = new Map<string, number>(recommendedPlugins.map((name, index) => [name, index]));
 
 function ReloadRequiredCard({ required }: { required: boolean; }) {
     return (
@@ -55,20 +72,20 @@ function ReloadRequiredCard({ required }: { required: boolean; }) {
             {required
                 ? (
                     <>
-                        <Heading tag="h4">Restart required!</Heading>
+                        <Heading tag="h4">Reinicialização necessária</Heading>
                         <Paragraph className={cl("dep-text")}>
-                            Restart now to apply new plugins and their settings
+                            Reinicie para aplicar as extensões e seus ajustes.
                         </Paragraph>
                         <Button onClick={() => location.reload()} className={cl("restart-button")}>
-                            Restart
+                            Reiniciar
                         </Button>
                     </>
                 )
                 : (
                     <>
-                        <Heading tag="h4">Plugin Management</Heading>
-                        <Paragraph>Press the cog wheel or info icon to get more info on a plugin</Paragraph>
-                        <Paragraph>Plugins with a cog wheel have settings you can modify!</Paragraph>
+                        <Heading tag="h4">Extensões</Heading>
+                        <Paragraph>Leia a descrição antes de ativar. A engrenagem abre os ajustes.</Paragraph>
+                        <Paragraph>Alguns recursos dependem das permissões do Discord ou do canal.</Paragraph>
                     </>
                 )}
         </Card>
@@ -92,28 +109,28 @@ function ExcludedPluginsList({ search }: { search: string; }) {
         : [];
 
     const ExcludedReasons: Record<PluginTarget, string> = {
-        desktop: "Discord Desktop app or Vesktop",
-        discordDesktop: "Discord Desktop app",
-        vesktop: "Vesktop app",
-        web: "Vesktop app and the Web version of Discord",
-        dev: "Developer version of Vencord",
-        browser: "Web Browser version of Vencord"
+        desktop: "aplicativo Discord ou SeCord",
+        discordDesktop: "aplicativo Discord",
+        vesktop: "aplicativo SeCord",
+        web: "SeCord ou versão web do Discord",
+        dev: "versão de desenvolvimento",
+        browser: "extensão para navegador"
     };
 
     return (
         <Paragraph className={Margins.top16}>
             {matchingExcludedPlugins.length
                 ? <>
-                    <Paragraph>Are you looking for:</Paragraph>
+                    <Paragraph>Talvez você esteja procurando:</Paragraph>
                     <ul>
                         {matchingExcludedPlugins.map(([name, reason]) => (
                             <li key={name}>
-                                <b>{name}</b>: Only available on the {ExcludedReasons[reason]}
+                                <b>{name}</b>: disponível apenas no {ExcludedReasons[reason]}
                             </li>
                         ))}
                     </ul>
                 </>
-                : "No plugins meet the search criteria."
+                : "Nenhuma extensão corresponde à busca."
             }
         </Paragraph>
     );
@@ -128,7 +145,7 @@ function PluginSettings() {
         if (changes.hasChanges)
             promptToRestart("reload", {
                 children: <>
-                    <Heading className={Margins.bottom8}>The following plugins require a restart:</Heading>
+                    <Heading className={Margins.bottom8}>Estas extensões precisam de reinicialização:</Heading>
                     <Paragraph>{Array.from(changes, k => k.split(".")[0]).join(", ")}</Paragraph>
                 </>
             });
@@ -148,11 +165,14 @@ function PluginSettings() {
         return o;
     }, []);
 
-    const sortedPlugins = useMemo(() =>
-        Object.values(Plugins).sort((a, b) => a.name.localeCompare(b.name)),
-        []
-    )
-        .toSorted((a, b) => Number(settings.plugins[b.name]?.isFavorite ?? false) - Number(settings.plugins[a.name]?.isFavorite ?? false));
+    const sortedPlugins = useMemo(() => Object.values(Plugins).sort((a, b) => a.name.localeCompare(b.name)), [])
+        .toSorted((a, b) => {
+            const favoriteDifference = Number(settings.plugins[b.name]?.isFavorite ?? false) - Number(settings.plugins[a.name]?.isFavorite ?? false);
+            if (favoriteDifference) return favoriteDifference;
+            const aRank = recommendationRank.get(a.name) ?? Infinity;
+            const bRank = recommendationRank.get(b.name) ?? Infinity;
+            return aRank - bRank || a.name.localeCompare(b.name);
+        });
 
     const hasUserPlugins = useMemo(() => !IS_STANDALONE && Object.values(PluginMeta).some(m => m.userPlugin), []);
 
@@ -193,6 +213,7 @@ function PluginSettings() {
             plugin.name.toLowerCase().includes(search) ||
             plugin.name.match(/[A-Z]/g)?.join("").toLowerCase().includes(search) || // acronyms like BF for BetterFolders
             plugin.description.toLowerCase().includes(search) ||
+            ptBR(plugin.description).toLowerCase().includes(search) ||
             plugin.searchTerms?.some(t => t.toLowerCase().includes(search))
         );
     };
@@ -214,7 +235,9 @@ function PluginSettings() {
         return lodash.isEqual(newPlugins, sortedPluginNames) ? [] : newPlugins;
     }));
 
-    const plugins = [] as JSX.Element[];
+    const favoritePlugins = [] as JSX.Element[];
+    const usefulPlugins = [] as JSX.Element[];
+    const otherPlugins = [] as JSX.Element[];
     const requiredPlugins = [] as JSX.Element[];
 
     const showApi = searchValue.status === SearchStatus.API_PLUGINS;
@@ -228,7 +251,7 @@ function PluginSettings() {
 
         if (isRequired) {
             const tooltipText = p.required || !depMap[p.name]
-                ? "This plugin is required for Vencord to function."
+                ? "Esta extensão é necessária para o SeCord funcionar."
                 : makeDependencyList(depMap[p.name]?.filter(d => settings.plugins[d].enabled));
 
             requiredPlugins.push(
@@ -246,7 +269,10 @@ function PluginSettings() {
                 </Tooltip>
             );
         } else {
-            plugins.push(
+            const target = settings.plugins[p.name]?.isFavorite
+                ? favoritePlugins
+                : recommendationRank.has(p.name) ? usefulPlugins : otherPlugins;
+            target.push(
                 <PluginCard
                     onRestartNeeded={(name, key) => changes.handleChange(`${name}.${key}`)}
                     disabled={false}
@@ -265,13 +291,13 @@ function PluginSettings() {
             <UIElementsButton />
 
             <Heading tag="h4" className={classes(Margins.top20, Margins.bottom8)}>
-                Filters
+                Filtros
             </Heading>
 
             <ErrorBoundary noop>
                 <TextInput
                     inputClassName={cl("filter-control")}
-                    placeholder="Search for a plugin..."
+                    placeholder="Busque uma extensão pelo nome ou função..."
                     value={searchValue.value}
                     onChange={onSearch}
                     autoFocus
@@ -282,41 +308,49 @@ function PluginSettings() {
                 <div className={classes(Margins.bottom20, Margins.top8, cl("filter-controls"))}>
                     <Select
                         options={[
-                            { label: "Show All", value: SearchStatus.ALL, default: true },
-                            { label: "Show Favorites", value: SearchStatus.FAVORITES },
-                            { label: "Show Enabled", value: SearchStatus.ENABLED },
-                            { label: "Show Disabled", value: SearchStatus.DISABLED },
-                            { label: "Show New", value: SearchStatus.NEW },
-                            hasUserPlugins && { label: "Show UserPlugins", value: SearchStatus.USER_PLUGINS },
-                            { label: "Show API Plugins", value: SearchStatus.API_PLUGINS },
+                            { label: "Todas", value: SearchStatus.ALL, default: true },
+                            { label: "Favoritas", value: SearchStatus.FAVORITES },
+                            { label: "Ativadas", value: SearchStatus.ENABLED },
+                            { label: "Desativadas", value: SearchStatus.DISABLED },
+                            { label: "Novas", value: SearchStatus.NEW },
+                            hasUserPlugins && { label: "Minhas extensões", value: SearchStatus.USER_PLUGINS },
+                            { label: "Extensões de suporte", value: SearchStatus.API_PLUGINS },
                         ].filter(isTruthy)}
                         serialize={String}
                         select={status => setSearchValue(prev => ({ ...prev, status }))}
                         isSelected={v => v === searchValue.status}
                         closeOnSelect={true}
-                        placeholder="Filter by Type"
+                        placeholder="Filtrar por estado"
                     />
                     <SearchableSelect
-                        options={PluginTags.map(tag => ({ label: tag, value: tag }))}
+                        options={PluginTags.map(tag => ({ label: ptBR(tag), value: tag }))}
                         value={searchValue.tags}
                         onChange={tags => setSearchValue(prev => ({ ...prev, tags }))}
                         closeOnSelect={false}
-                        placeholder="Filter by Tags"
+                        placeholder="Filtrar por categoria"
                         multi
                     />
                 </div>
             </ErrorBoundary>
 
-            <Heading tag="h4" className={Margins.top20}>Plugins</Heading>
-
-            {plugins.length || requiredPlugins.length
+            {favoritePlugins.length || usefulPlugins.length || otherPlugins.length || requiredPlugins.length
                 ? (
-                    <div className={cl("grid")}>
-                        {plugins.length
-                            ? plugins
-                            : <Paragraph>No plugins meet the search criteria.</Paragraph>
-                        }
-                    </div>
+                    <>
+                        {!!favoritePlugins.length && <>
+                            <Heading tag="h4" className={Margins.top20}>Favoritas</Heading>
+                            <Paragraph>As extensões que você marcou com a estrela ficam sempre aqui.</Paragraph>
+                            <div className={cl("grid")}>{favoritePlugins}</div>
+                        </>}
+                        {!!usefulPlugins.length && <>
+                            <Heading tag="h4" className={Margins.top20}>Mais úteis para começar</Heading>
+                            <Paragraph>Uma seleção de funções práticas. Você escolhe o que ativar.</Paragraph>
+                            <div className={cl("grid")}>{usefulPlugins}</div>
+                        </>}
+                        {!!otherPlugins.length && <>
+                            <Heading tag="h4" className={Margins.top20}>Outras extensões</Heading>
+                            <div className={cl("grid")}>{otherPlugins}</div>
+                        </>}
+                    </>
                 )
                 : <ExcludedPluginsList search={search} />
             }
@@ -325,13 +359,13 @@ function PluginSettings() {
             <Divider className={Margins.top20} />
 
             <Heading tag="h4" className={classes(Margins.top20, Margins.bottom8)}>
-                Required Plugins
+                Extensões necessárias
             </Heading>
 
             <div className={cl("grid")}>
                 {requiredPlugins.length
                     ? requiredPlugins
-                    : <Paragraph>No plugins meet the search criteria.</Paragraph>
+                    : <Paragraph>Nenhuma extensão corresponde à busca.</Paragraph>
                 }
             </div>
         </SettingsTab >
@@ -341,10 +375,10 @@ function PluginSettings() {
 function makeDependencyList(deps: string[]) {
     return (
         <>
-            <Paragraph>This plugin is required by:</Paragraph>
+            <Paragraph>Esta extensão é necessária para:</Paragraph>
             {deps.map((dep: string) => <Paragraph key={dep} className={cl("dep-text")}>{dep}</Paragraph>)}
         </>
     );
 }
 
-export default wrapTab(PluginSettings, "Plugins");
+export default wrapTab(PluginSettings, "Extensões");

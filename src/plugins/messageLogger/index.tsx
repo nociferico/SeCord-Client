@@ -58,10 +58,10 @@ const settings = definePluginSettings({
     deleteStyle: {
         type: OptionType.SELECT,
         description: "The style of deleted messages",
-        default: "text",
+        default: "overlay",
         options: [
-            { label: "Red text", value: "text", default: true },
-            { label: "Red overlay", value: "overlay" }
+            { label: "Red text", value: "text" },
+            { label: "Red overlay", value: "overlay", default: true }
         ],
         onChange: () => addDeleteStyle()
     },
@@ -237,6 +237,7 @@ export function parseEditContent(content: string, message: Message) {
 export default definePlugin({
     name: "MessageLogger",
     description: "Temporarily logs deleted and edited messages.",
+    enabledByDefault: true,
     tags: ["Chat", "Utility"],
     authors: [Devs.rushii, Devs.Ven, Devs.AutumnVN, Devs.Nickyux, Devs.Kyuuhachi, Devs.sadan, Devs.f3tch],
     dependencies: ["MessageUpdaterAPI"],
