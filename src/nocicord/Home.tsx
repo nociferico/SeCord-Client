@@ -124,7 +124,7 @@ export function NociCordHome() {
                 <div className="vc-nocicord-voice-grid">
                     <p><strong>Microfone mutado</strong><br />Você deixa de falar e continua ouvindo. Server mute também mantém a escuta.</p>
                     <p><strong>Server deafen</strong><br />Bloqueia a escuta até que alguém com permissão remova o estado.</p>
-                    <p><strong>Compartilhar tela</strong><br />Precisa da permissão do canal e da sua autorização de captura.</p>
+                    <p><strong>Compartilhar tela</strong><br />Precisa da permissão do canal e da sua autorização de captura. O Discord pode desativar o Go Live na sua região.</p>
                 </div>
             </section>
 

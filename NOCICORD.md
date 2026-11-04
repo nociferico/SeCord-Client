@@ -14,6 +14,8 @@ Modificações do cliente contrariam os termos de serviço do Discord, conforme 
 
 Os perfis são escolhas de **aparência**, não limites de CPU, qualidade de vídeo ou garantias de FPS. O modo Essencial reduz efeitos visuais no painel. As opções de compartilhamento que o Vencord oferece dependem da plataforma; a permissão do servidor e a autorização de captura continuam obrigatórias.
 
+No Brasil, o Discord também suspendeu o Go Live e o vídeo em tempo real por determinação da ANPD. Essa restrição se aplica ao SeCord enquanto ele usa o serviço do Discord. Veja o [aviso oficial](https://support.discord.com/hc/pt-br/articles/42704051358359-Por-que-os-recursos-de-v%C3%ADdeo-est%C3%A3o-indispon%C3%ADveis-no-Brasil-no-momento).
+
 ## Compilar
 
 Requer Node.js 22 ou mais recente e pnpm. Na pasta do projeto:
