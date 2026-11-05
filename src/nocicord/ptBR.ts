@@ -13,7 +13,7 @@ const reviewed: Record<string, string> = {
     "Plain style with Lock Icon instead": "Normal, com ícone de cadeado",
     "Muted style with hidden eye icon on the right": "Discreto, com ícone de olho oculto",
     "Whether the allowed users and roles dropdown on hidden channels should be open by default": "Mostrar por padrão os usuários e cargos autorizados na prévia do canal.",
-    "Temporarily logs deleted and edited messages.": "Mantém na tela, em vermelho, mensagens apagadas que o SeCord já recebeu e mostra o histórico de edições. O registro é temporário; não recupera mensagens anteriores ou nunca carregadas.",
+    "Temporarily logs deleted and edited messages.": "Marca em vermelho mensagens apagadas que o SeCord já recebeu e mostra edições. Pode guardar até 500 mensagens apagadas por 30 dias neste computador; não recupera mensagens nunca carregadas.",
     "The style of deleted messages": "Como destacar mensagens apagadas.",
     "Red text": "Texto vermelho",
     "Red overlay": "Fundo vermelho",
