@@ -55,6 +55,7 @@ const recommendedPlugins = [
     "ShowHiddenChannels",
     "FakeNitro",
     "SpotifyControls",
+    "PlatformIndicators",
     "BetterGifPicker",
     "BetterFolders",
     "ClearURLs",

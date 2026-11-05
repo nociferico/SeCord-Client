@@ -185,7 +185,7 @@ function HiddenChannelLockScreen({ channel }: { channel: Channel; }) {
 
                 {(!channel.isGuildVoice() && !channel.isGuildStageVoice()) && (
                     <Paragraph size="lg">
-                        Você não tem acesso às {channel.isForumChannel() ? "publicações" : "mensagens"} deste canal.
+                        O SeCord pode mostrar que este canal existe, mas o servidor não entrega as {channel.isForumChannel() ? "publicações" : "mensagens"} à sua conta.
                         {channel.isForumChannel() && topic && topic.length > 0 && " Você pode ver as regras do fórum:"}
                     </Paragraph>
                 )}

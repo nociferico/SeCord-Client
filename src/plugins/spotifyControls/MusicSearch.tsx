@@ -116,14 +116,14 @@ export function MusicSearch() {
                         </button>
                     </div>)}
                 </div>}
-                <div className="vc-spotify-search-status" role="status" aria-live="polite">
+                <div className={`vc-spotify-search-status${error ? " vc-spotify-search-error" : ""}`} role={error ? "alert" : "status"} aria-live="polite">
                     {error || (loading ? "Buscando..." : query.trim().length < 2 ? "Digite pelo menos duas letras." : tracks.length === 0 ? "Nenhuma música encontrada." : tracks.length < total ? "Desça para ver mais." : "")}
                 </div>
                 {failedTrack && <button
                     type="button"
                     className="vc-spotify-search-external"
                     onClick={() => SpotifyStore.openExternal(`/track/${failedTrack.id}`)}
-                >Abrir música no Spotify</button>}
+                >Abrir esta música no Spotify para apertar Play</button>}
                 {error && !failedTrack && query.trim().length >= 2 && <button
                     type="button"
                     className="vc-spotify-search-external"

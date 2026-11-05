@@ -47,8 +47,11 @@ const { useStatusFillColor } = mapMangledModuleLazy([".5625*", "translate"], {
 });
 
 const platformMap = {
-    embedded: "Embedded (Console or Game)",
-    vr: "VR"
+    desktop: "Computador",
+    web: "Navegador",
+    mobile: "Celular",
+    embedded: "Console ou jogo",
+    vr: "Realidade virtual"
 };
 
 const badge: ProfileBadge = {
@@ -59,17 +62,17 @@ const badge: ProfileBadge = {
 
 const indicatorLocations = {
     list: {
-        description: "In the member list",
+        description: "na lista de membros",
         onEnable: () => addMemberListDecorator("platform-indicator", ({ user }) => renderPlatformIndicators(user, true)),
         onDisable: () => removeMemberListDecorator("platform-indicator")
     },
     badges: {
-        description: "In user profiles, as badges",
+        description: "nos perfis, como placas",
         onEnable: () => addProfileBadge(badge),
         onDisable: () => removeProfileBadge(badge)
     },
     messages: {
-        description: "Inside messages",
+        description: "ao lado das mensagens",
         onEnable: () => addMessageDecoration("platform-indicator", props => renderPlatformIndicators(props.message?.author, false)),
         onDisable: () => removeMessageDecoration("platform-indicator")
     }
@@ -88,7 +91,7 @@ const settings = definePluginSettings({
         Object.entries(indicatorLocations).map(([key, value]) => {
             return [key, {
                 type: OptionType.BOOLEAN,
-                description: `Show indicators ${value.description.toLowerCase()}`,
+                description: `Mostrar indicadores ${value.description}`,
                 // onChange doesn't give any way to know which setting was changed, so restart required
                 restartNeeded: true,
                 default: true
@@ -97,7 +100,7 @@ const settings = definePluginSettings({
     ),
     colorMobileIndicator: {
         type: OptionType.BOOLEAN,
-        description: "Whether to make the mobile indicator match the color of the user status.",
+        description: "Usar a cor do status da pessoa no indicador de celular.",
         default: true,
         restartNeeded: true
     }
@@ -122,7 +125,7 @@ function Icon(path: string, opts?: { viewBox?: string; width?: number; height?: 
 }
 
 function getPlatformTooltip(platform: DiscordPlatform): string {
-    return platformMap[platform] ?? platform.charAt(0).toUpperCase() + platform.slice(1);
+    return platformMap[platform] ?? "Outro dispositivo";
 }
 
 const PlatformIcon = ({ platform, status, small }: { platform: DiscordPlatform, status: OnlineStatus; small: boolean; }) => {
@@ -219,7 +222,8 @@ function OtherUserPlatformIndicators({ user, small = false }: { user: User; smal
 
 export default definePlugin({
     name: "PlatformIndicators",
-    description: "Adds platform indicators (Desktop, Mobile, Web...) to users",
+    description: "Mostra se a pessoa está no computador, celular, navegador, console ou realidade virtual quando o Discord disponibiliza essa informação.",
+    enabledByDefault: true,
     tags: ["Appearance"],
     authors: [Devs.kemo, Devs.TheSun, Devs.Nuckyz, Devs.Ven],
     dependencies: ["MessageDecorationsAPI", "MemberListDecoratorsAPI"],

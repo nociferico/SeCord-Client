@@ -122,6 +122,12 @@
     margin-top: 5px;
 }
 
+.vc-spotify-search-error {
+    color: var(--text-danger);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
 .vc-spotify-search-external {
     margin-top: 5px;
     padding: 0;

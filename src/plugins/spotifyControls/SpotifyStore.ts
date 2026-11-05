@@ -203,14 +203,21 @@ export const SpotifyStore = proxyLazyWebpack(() => {
             });
             const devices: Device[] = response?.body?.devices ?? response?.devices ?? [];
             const device = devices.find(item => item.is_active);
-            if (!device?.id) throw new Error("Nenhum dispositivo Spotify ativo. Abra o Spotify, escolha um dispositivo disponível e tente de novo.");
+            if (!device?.id) throw new Error("Nenhum dispositivo Spotify ativo. Abra uma música no Spotify e aperte Play uma vez; depois volte e tente de novo.");
             if (device.is_restricted) throw new Error("O dispositivo Spotify ativo não aceita controle remoto. Escolha outro dispositivo no Spotify.");
 
-            return SpotifyAPI.put(socket.accountId, socket.accessToken, {
+            const playback = await SpotifyAPI.put(socket.accountId, socket.accessToken, {
                 url: `${API_BASE}/play`,
                 query: { device_id: device.id },
                 body: { uris: [uri] }
             });
+            const status = playback?.status ?? playback?.statusCode;
+            if (typeof status === "number" && (status < 200 || status >= 300)) {
+                throw new Error(status === 403
+                    ? "O Spotify recusou a reprodução. Verifique se a conta conectada ao Discord tem Premium e permissão de reprodução."
+                    : `O Spotify recusou a reprodução (erro ${status}). Escolha um dispositivo ativo e tente de novo.`);
+            }
+            return playback;
         }
 
         _req(method: "post" | "get" | "put", route: string, data: any = {}) {
