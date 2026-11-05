@@ -144,6 +144,12 @@ const DefaultSettings: Settings = {
 
 const settings = !IS_REPORTER ? VencordNative.settings.get() : {} as Settings;
 mergeDefaults(settings, DefaultSettings);
+const hadSeCordDecoration = "dragonDecoration" in settings.nocicord;
+if (hadSeCordDecoration) {
+    const oldSetting = settings.nocicord as typeof settings.nocicord & { dragonDecoration?: boolean; };
+    if (oldSetting.dragonDecoration && settings.plugins.Decor) settings.plugins.Decor.enabled = false;
+    delete oldSetting.dragonDecoration;
+}
 
 export const SettingsStore = new SettingsStoreClass(settings, {
     readOnly: true,
@@ -192,6 +198,7 @@ if (!IS_REPORTER) {
         SettingsStore.plain.cloud.settingsSyncVersion = Date.now();
         VencordNative.settings.set(SettingsStore.plain, path);
     });
+    if (hadSeCordDecoration) SettingsStore.markAsChanged();
 }
 
 /**

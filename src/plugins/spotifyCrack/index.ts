@@ -16,9 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
+
+migratePluginSettings("SpotifySemPausa", "SpotifyCrack");
 
 const settings = definePluginSettings({
     noSpotifyAutoPause: {
@@ -36,21 +38,13 @@ const settings = definePluginSettings({
 });
 
 export default definePlugin({
-    name: "SpotifyCrack",
-    description: "Free listen along, no auto-pausing in voice chat, and allows activity to continue playing when idling",
+    name: "SpotifySemPausa",
+    description: "Prevent the client from pausing Spotify during voice chat",
     tags: ["Media", "Utility", "Activity"],
     authors: [Devs.Cyn, Devs.Nuckyz],
     settings,
 
     patches: [
-        {
-
-            find: 'dispatch({type:"SPOTIFY_PROFILE_UPDATE"',
-            replacement: {
-                match: /SPOTIFY_PROFILE_UPDATE.+?isPremium:(?="premium"===(\i)\.body\.product)/,
-                replace: (m, req) => `${m}(${req}.body.product="premium")&&`
-            },
-        },
         {
             find: "}getPlayableComputerDevices(){",
             replacement: [

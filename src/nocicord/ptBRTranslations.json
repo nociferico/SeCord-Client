@@ -263,7 +263,7 @@
   "Fixes spotify embeds being incredibly loud by letting you customise the volume": "Corrige incorporações do Spotify incrivelmente altas, permitindo que você personalize o volume",
   "Google Translate": "Google Tradutor",
   "Force the owner crown next to usernames even if the server is large.": "Forçar a coroa do proprietário ao lado dos nomes de usuário, mesmo que o servidor seja grande.",
-  "Free listen along, no auto-pausing in voice chat, and allows activity to continue playing when idling": "Ouça gratuitamente, sem pausa automática no bate-papo por voz e permite que a atividade continue sendo reproduzida quando ocioso",
+  "Prevent the client from pausing Spotify during voice chat": "Evita que o cliente pause o Spotify durante uma chamada de voz",
   "Generates a friend invite link.": "Gera um link de convite de amigo.",
   "Forwards discord notifications to XSOverlay, for easy viewing in VR": "Encaminha notificações de discórdia para XSOverlay, para fácil visualização em VR",
   "Greet (you can only greet 3 times)": "Cumprimentar (você só pode cumprimentar 3 vezes)",

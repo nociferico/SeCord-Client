@@ -1,37 +1,24 @@
-# NociCord
+# SeCord
 
-NociCord é uma versão local personalizada do Vencord. O código original continua creditado e licenciado sob GPL-3.0-or-later. Este projeto não é afiliado ao Discord nem à equipe do Vencord.
-Modificações do cliente contrariam os termos de serviço do Discord, conforme informado pelo próprio Vencord.
+Este repositório contém o cliente modificado usado pelo [SeCord Desktop](https://github.com/nociferico/SeCord-Desktop). O aplicativo Windows é instalado à parte e não altera os arquivos do Discord original.
 
-## O que esta primeira versão traz
+## No aplicativo
 
-- Painel NociCord com monograma, tipografia e organização próprios.
-- Perfis visuais Essencial, Equilibrado e Expressivo.
-- Cor de destaque em violeta, rosa ou ciano.
-- Controles independentes de densidade e movimento no painel.
-- Explicações claras sobre mute, server deafen e compartilhamento.
-- Compilação própria com o atualizador automático do Vencord desativado.
+- A tela de extensões tem descrições em português, favoritos e uma seleção de opções úteis.
+- A barra de mensagem deixa emoji e Apps à vista; a seta abre as demais ferramentas.
+- O botão de ajuda explica os atalhos do SeCord em português.
+- Em **SeCord → Spotify na chamada**, você pode ativar a opção que impede a rotina local de pausa do Discord. É preciso reiniciar após mudar. Ela não controla pausas feitas pelo Spotify em outro dispositivo.
+- A decoração de avatar criada durante os testes foi removida. O SeCord não inclui essa imagem nem a aplica ao perfil.
 
-Os perfis são escolhas de **aparência**, não limites de CPU, qualidade de vídeo ou garantias de FPS. O modo Essencial reduz efeitos visuais no painel. As opções de compartilhamento que o Vencord oferece dependem da plataforma; a permissão do servidor e a autorização de captura continuam obrigatórias.
+A busca do Spotify depende de conta, dispositivo ativo e permissões de reprodução. Tradução, registro de mensagens apagadas e outras extensões dependem dos dados que o Discord entrega ao cliente. Consulte o [README do aplicativo](https://github.com/nociferico/SeCord-Desktop#readme) para os limites e os testes de cada recurso.
 
-No Brasil, o Discord também suspendeu o Go Live e o vídeo em tempo real por determinação da ANPD. Essa restrição se aplica ao SeCord enquanto ele usa o serviço do Discord. Veja o [aviso oficial](https://support.discord.com/hc/pt-br/articles/42704051358359-Por-que-os-recursos-de-v%C3%ADdeo-est%C3%A3o-indispon%C3%ADveis-no-Brasil-no-momento).
+## Base e licença
 
-## Compilar
+O cliente deriva do [Vencord](https://github.com/Vendicated/Vencord) 1.15.16, commit `383409e6a6ec9008ee8a7496500f1e75f17824d1`. Os créditos e avisos dos autores originais permanecem no código. A licença é [GPL-3.0-or-later](LICENSE). SeCord não é afiliado ao Discord ou à equipe do Vencord.
 
-Requer Node.js 22 ou mais recente e pnpm. Na pasta do projeto:
+Para compilar, use Node.js 22 ou superior e pnpm:
 
 ```powershell
 pnpm install --frozen-lockfile
 pnpm build:nocicord
 ```
-
-O resultado fica em `dist`. O executável oficial `VencordInstaller.exe` baixa a publicação oficial do Vencord quando usado normalmente; ele não instala esta compilação por conta própria. Para instalar a compilação local no Discord desktop, use o fluxo de desenvolvimento do projeto (`pnpm inject`) somente depois de fechar o Discord e fazer backup das configurações. `pnpm uninject` reverte a injeção. A instalação não foi executada durante a criação do NociCord.
-
-## Limites de voz
-
-Mutar o próprio microfone ou receber server mute impede transmitir voz e normalmente mantém a escuta. Server deafen bloqueia a escuta até que seja removido por alguém com permissão. NociCord não altera permissões do servidor nem mascara o estado de voz para terceiros.
-
-## Base e manutenção
-
-Base inicial: Vendicated/Vencord 1.15.16, commit `383409e6a6ec9008ee8a7496500f1e75f17824d1`. O Discord muda frequentemente; plugins e patches devem ser verificados após atualizações. O projeto mantém a licença e os avisos de copyright dos arquivos herdados.
-Os testes de compilação, tipos e estilo passaram. A interface ainda precisa de uma verificação manual dentro do Discord antes de uso diário.

@@ -23,7 +23,8 @@ const accents = [
 ] as const;
 
 export function NociCordHome() {
-    const { nocicord } = useSettings(["nocicord.*"]);
+    const { nocicord, plugins } = useSettings(["nocicord.*", "plugins.SpotifySemPausa.*"]);
+    const spotifyPauseBlocked = plugins.SpotifySemPausa.enabled && plugins.SpotifySemPausa.noSpotifyAutoPause !== false;
 
     function setProfile(profile: typeof profiles[number]) {
         nocicord.profile = profile.id;
@@ -115,7 +116,25 @@ export function NociCordHome() {
                 <div className="vc-nocicord-voice-grid">
                     <p><strong>MessageLogger</strong><br />Marca em vermelho mensagens apagadas que já passaram pelo seu SeCord. O registro é temporário.</p>
                     <p><strong>FakeNitro</strong><br />Emojis e figurinhas de outros servidores podem ser enviados como links ou imagens quando o canal permitir. Não concede Nitro.</p>
-                    <p><strong>Decor e FakeProfileThemes</strong><br />Personalizam sua aparência. Alguns efeitos aparecem só para você ou para quem usa a mesma extensão.</p>
+                    <p><strong>SpotifyControls</strong><br />Mostra a música atual e permite buscar faixas quando a conta e o dispositivo estiverem conectados.</p>
+                </div>
+            </section>
+
+            <section className="vc-nocicord-voice">
+                <div className="vc-nocicord-module-title"><h2>Spotify na chamada</h2></div>
+                <div className="vc-nocicord-voice-grid">
+                    <p>Evita a pausa automática acionada pelo cliente quando o microfone fica ativo. Reinicie o SeCord depois de mudar esta opção.</p>
+                    <button type="button" className="vc-nocicord-toggle" role="switch" aria-checked={spotifyPauseBlocked} onClick={() => {
+                        if (spotifyPauseBlocked) plugins.SpotifySemPausa.enabled = false;
+                        else {
+                            plugins.SpotifySemPausa.noSpotifyAutoPause = true;
+                            plugins.SpotifySemPausa.enabled = true;
+                        }
+                    }}>
+                        <span>Evitar pausa do Spotify<small>Ative e reinicie com Ctrl + Shift + R.</small></span>
+                        <span className="vc-nocicord-toggle-track" aria-hidden="true" />
+                    </button>
+                    <p>Esta opção não controla pausas feitas pelo próprio Spotify ou por outros dispositivos.</p>
                 </div>
             </section>
 

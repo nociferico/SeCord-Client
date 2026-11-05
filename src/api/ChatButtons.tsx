@@ -12,7 +12,7 @@ import { classes } from "@utils/misc";
 import { IconComponent } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
 import { findCssClassesLazy } from "@webpack";
-import { Clickable, Menu, Tooltip } from "@webpack/common";
+import { Clickable, Menu, ReactDOM, Tooltip, useLayoutEffect, useRef, useState } from "@webpack/common";
 import { HTMLProps, JSX, MouseEventHandler, ReactNode } from "react";
 
 import { addContextMenuPatch, findGroupChildrenByChildId } from "./ContextMenu";
@@ -112,8 +112,69 @@ function VencordChatBarButtons(props: ChatBarProps) {
     );
 }
 
+function SeCordChatBarOverflow({ buttons, props }: { buttons: ReactNode[]; props: ChatBarProps; }) {
+    const [open, setOpen] = useState(false);
+    const [position, setPosition] = useState({ left: 0, top: 0 });
+    const triggerRef = useRef<HTMLButtonElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
+
+    useLayoutEffect(() => {
+        if (!open) return;
+
+        const updatePosition = () => {
+            const trigger = triggerRef.current?.getBoundingClientRect();
+            const panel = panelRef.current?.getBoundingClientRect();
+            if (!trigger || !panel) return;
+
+            setPosition({
+                left: Math.max(8, Math.min(trigger.right - panel.width, window.innerWidth - panel.width - 8)),
+                top: Math.max(8, trigger.top - panel.height - 8)
+            });
+        };
+
+        const closeOutside = (event: PointerEvent) => {
+            const target = event.target as Node;
+            if (!triggerRef.current?.contains(target) && !panelRef.current?.contains(target)) setOpen(false);
+        };
+
+        updatePosition();
+        window.addEventListener("resize", updatePosition);
+        window.addEventListener("scroll", updatePosition, true);
+        document.addEventListener("pointerdown", closeOutside);
+        return () => {
+            window.removeEventListener("resize", updatePosition);
+            window.removeEventListener("scroll", updatePosition, true);
+            document.removeEventListener("pointerdown", closeOutside);
+        };
+    }, [open]);
+
+    return (
+        <>
+            <button ref={triggerRef} type="button" className="vc-secord-chatbar-overflow-trigger" aria-label="Mostrar mais ferramentas" aria-expanded={open} title="Mais ferramentas" onClick={() => setOpen(!open)}>
+                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 15 6-6 6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            </button>
+            {open && ReactDOM.createPortal(
+                <div ref={panelRef} className="vc-secord-chatbar-overflow-panel" style={position} role="group" aria-label="Mais ferramentas">
+                    <VencordChatBarButtons {...props} />
+                    {buttons}
+                </div>,
+                document.body
+            )}
+        </>
+    );
+}
+
 export function _injectButtons(buttons: ReactNode[], props: ChatBarProps) {
     if (props.disabled || buttons.length === 0) return;
+
+    if (IS_VESKTOP && ["normal", "sidebar"].includes(props.type.analyticsName)) {
+        const visibleButtons = buttons.splice(-2);
+        const hiddenButtons = buttons.splice(0);
+        buttons.push(<SeCordChatBarOverflow key="secord-chatbar-overflow" buttons={hiddenButtons} props={props} />, ...visibleButtons);
+        return;
+    }
 
     buttons.unshift(<VencordChatBarButtons key="vencord-chat-buttons" {...props} />);
 }
