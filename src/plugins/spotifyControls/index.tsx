@@ -26,12 +26,6 @@ import hoverOnlyStyle from "./hoverOnly.css?managed";
 import { Player } from "./PlayerComponent";
 
 export const settings = definePluginSettings({
-    showMusicSearch: {
-        description: "Show a compact music search above the Spotify player",
-        type: OptionType.BOOLEAN,
-        default: true,
-        restartNeeded: true
-    },
     hoverControls: {
         description: "Show controls on hover",
         type: OptionType.BOOLEAN,
@@ -74,9 +68,9 @@ export default definePlugin({
         {
             find: ".PLAYER_DEVICES",
             replacement: [{
-                // Adds POST and a Marker to the SpotifyAPI (so we can easily find it)
+                // Marks the Spotify API module so the player controls can find it
                 match: /get:(\i)\.bind\(null,(\i\.\i)\.get\)/,
-                replace: "post:$1.bind(null,$2.post),vcSpotifyMarker:1,$&"
+                replace: "vcSpotifyMarker:1,$&"
             },
             {
                 // Spotify Connect API returns status 202 instead of 204 when skipping tracks.

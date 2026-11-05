@@ -30,7 +30,6 @@ import { formatDuration } from "@utils/text";
 import { ContextMenuApi, FluxDispatcher, Menu, React, useEffect, useState, useStateFromStores } from "@webpack/common";
 
 import { settings } from ".";
-import { MusicSearch } from "./MusicSearch";
 import { SeekBar } from "./SeekBar";
 import { SpotifyStore, Track } from "./SpotifyStore";
 
@@ -385,7 +384,6 @@ export function Player() {
 
     return (
         <div id={cl("player")} style={exportTrackImageStyle}>
-            {settings.store.showMusicSearch && <MusicSearch />}
             <Info track={track} />
             <SpotifySeekBar />
             <Controls />
