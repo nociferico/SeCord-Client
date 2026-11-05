@@ -41,7 +41,7 @@ export function WindowsMaterialSettings() {
                         value: "tabbed"
                     },
                     {
-                        label: "Acrylic (blurs the window behind Vesktop for a translucent background)",
+                        label: "Acrílico (desfoca a janela atrás do SeCord)",
                         value: "acrylic"
                     }
                 ]}

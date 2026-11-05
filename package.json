@@ -2,7 +2,7 @@
     "name": "nocicord",
     "private": "true",
     "version": "1.15.16",
-    "description": "NociCord, a configurable Vencord-based Discord client mod",
+    "description": "SeCord (SoulEater), a configurable Discord client mod based on Vencord",
     "homepage": "https://github.com/Vendicated/Vencord#readme",
     "bugs": {
         "url": "https://github.com/Vendicated/Vencord/issues"

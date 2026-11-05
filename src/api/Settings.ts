@@ -163,6 +163,9 @@ export const SettingsStore = new SettingsStoreClass(settings, {
         // Since the property is not set, check if this is a plugin's setting and if so, try to resolve
         // the default value.
         if (path.startsWith("plugins.")) {
+            if (path === "plugins.MessageLogger" && key === "isFavorite")
+                return (target[key] = true);
+
             const plugin = path.slice("plugins.".length);
             if (plugin in plugins) {
                 const setting = plugins[plugin].settings?.def[key];

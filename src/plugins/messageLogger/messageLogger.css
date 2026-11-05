@@ -48,3 +48,49 @@
     flex-wrap: wrap;
     gap: 16px;
 }
+
+.secord-saved-deletes {
+    margin: 12px 0;
+}
+
+.secord-saved-deletes > p {
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+.secord-saved-deletes-actions {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.secord-saved-deletes-list {
+    max-height: 320px;
+    overflow: auto;
+}
+
+.secord-saved-deletes-item {
+    background: color-mix(in srgb, var(--status-danger) 12%, var(--background-secondary));
+    border-left: 3px solid var(--status-danger);
+    border-radius: 4px;
+    margin: 7px 0;
+    padding: 10px 12px;
+}
+
+.secord-saved-deletes-item > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.secord-saved-deletes-item span,
+.secord-saved-deletes-item small {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.secord-saved-deletes-item p {
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    margin: 7px 0;
+}

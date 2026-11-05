@@ -65,18 +65,16 @@ function CloudSetupSection() {
 
     return (
         <section>
-            <SectionHeading text="Cloud Integrations" />
+            <SectionHeading text="Sincronização na nuvem" />
 
             <Paragraph size="md" className={Margins.bottom20}>
-                Vencord comes with a cloud integration that adds goodies like settings sync across devices.
-                It <Link href="https://vencord.dev/cloud/privacy">respects your privacy</Link>, and
-                the <Link href="https://github.com/Vencord/Backend">source code</Link> is AGPL 3.0 licensed so you
-                can host it yourself.
+                O SeCord pode sincronizar ajustes entre dispositivos usando um servidor externo compatível.
+                O servidor padrão pertence ao projeto de origem; consulte sua <Link href="https://vencord.dev/cloud/privacy">política de privacidade</Link> e o <Link href="https://github.com/Vencord/Backend">código aberto do serviço</Link> antes de ativar.
             </Paragraph>
             <FormSwitch
                 key="backend"
-                title="Enable Cloud Integrations"
-                description="This will request authorization if you have not yet set up cloud integrations."
+                title="Ativar sincronização na nuvem"
+                description="Você precisará autorizar o servidor escolhido na primeira utilização."
                 value={cloud.authenticated}
                 onChange={v => {
                     if (v)
@@ -85,9 +83,9 @@ function CloudSetupSection() {
                         cloud.authenticated = v;
                 }}
             />
-            <Heading className={classes(Margins.top16, Margins.bottom8)}>Backend URL</Heading>
+            <Heading className={classes(Margins.top16, Margins.bottom8)}>Endereço do servidor</Heading>
             <Paragraph className={Margins.bottom8}>
-                Which backend to use when using cloud integrations.
+                Escolha o servidor usado para a sincronização.
             </Paragraph>
             <CheckedTextInput
                 key="backendUrl"
@@ -111,7 +109,7 @@ function CloudSetupSection() {
                     }}
                     Icon={RestartIcon}
                 >
-                    Reauthorise
+                    Autorizar novamente
                 </ButtonWithIcon>
             </Grid>
         </section>
@@ -130,7 +128,7 @@ function SettingsSyncSection() {
                 <FormSwitch
                     key="cloud-sync"
                     title="Enable Settings Sync"
-                    description="Save your Vencord settings to the cloud so you can easily keep them the same on all your devices"
+                    description="Salvar os ajustes do SeCord na nuvem para usá-los em outros dispositivos"
                     value={cloud.settingsSync}
                     onChange={v => { cloud.settingsSync = v; }}
                     disabled={!cloud.authenticated}

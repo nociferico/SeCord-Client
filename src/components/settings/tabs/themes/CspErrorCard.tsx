@@ -29,7 +29,7 @@ export function CspErrorCard() {
     const allowUrl = async (url: string) => {
         const { origin: baseUrl, host } = new URL(url);
 
-        const result = await VencordNative.csp.requestAddOverride(baseUrl, ["connect-src", "img-src", "style-src", "font-src"], "Vencord Themes");
+        const result = await VencordNative.csp.requestAddOverride(baseUrl, ["connect-src", "img-src", "style-src", "font-src"], "Temas do SeCord");
         if (result !== "ok") return;
 
         CspBlockedUrls.forEach(url => {
@@ -50,7 +50,7 @@ export function CspErrorCard() {
             <Paragraph>Some images, styles, or fonts were blocked because they come from disallowed domains.</Paragraph>
             <Paragraph>It is highly recommended to move them to GitHub or Imgur. But you may also allow domains if you fully trust them.</Paragraph>
             <Paragraph>
-                After allowing a domain, you have to fully close (from tray / task manager) and restart {IS_DISCORD_DESKTOP ? "Discord" : "Vesktop"} to apply the change.
+                Depois de permitir um domínio, feche o {IS_DISCORD_DESKTOP ? "Discord" : "SeCord"} completamente e abra novamente para aplicar a mudança.
             </Paragraph>
 
             <Heading className={classes(Margins.top16, Margins.bottom8)}>Blocked URLs</Heading>

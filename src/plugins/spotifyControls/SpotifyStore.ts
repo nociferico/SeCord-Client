@@ -77,6 +77,7 @@ interface PlayerState {
 interface Device {
     id: string;
     is_active: boolean;
+    is_restricted?: boolean;
 }
 
 type Repeat = "off" | "track" | "context";
@@ -193,8 +194,23 @@ export const SpotifyStore = proxyLazyWebpack(() => {
             return { items: tracks.items, total: tracks.total ?? 0 };
         }
 
-        playTrack(uri: string) {
-            return this._req("put", "/play", { body: { uris: [uri] } });
+        async playTrack(uri: string) {
+            const { socket } = SpotifySocket.getActiveSocketAndDevice();
+            if (!socket?.accessToken) throw new Error("Conecte o Spotify ao Discord para controlar a reprodução.");
+
+            const response = await SpotifyAPI.get(socket.accountId, socket.accessToken, {
+                url: `${API_BASE}/devices`
+            });
+            const devices: Device[] = response?.body?.devices ?? response?.devices ?? [];
+            const device = devices.find(item => item.is_active);
+            if (!device?.id) throw new Error("Nenhum dispositivo Spotify ativo. Abra o Spotify, escolha um dispositivo disponível e tente de novo.");
+            if (device.is_restricted) throw new Error("O dispositivo Spotify ativo não aceita controle remoto. Escolha outro dispositivo no Spotify.");
+
+            return SpotifyAPI.put(socket.accountId, socket.accessToken, {
+                url: `${API_BASE}/play`,
+                query: { device_id: device.id },
+                body: { uris: [uri] }
+            });
         }
 
         _req(method: "post" | "get" | "put", route: string, data: any = {}) {

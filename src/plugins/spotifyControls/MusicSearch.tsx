@@ -15,6 +15,7 @@ export function MusicSearch() {
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [failedTrack, setFailedTrack] = useState<SearchTrack | null>(null);
     const generation = useRef(0);
 
     useEffect(() => {
@@ -24,6 +25,7 @@ export function MusicSearch() {
         setTracks([]);
         setTotal(0);
         setError("");
+        setFailedTrack(null);
         if (term.length < 2) {
             setLoading(false);
             return;
@@ -71,12 +73,14 @@ export function MusicSearch() {
     }
 
     async function chooseTrack(track: SearchTrack) {
+        setError("");
+        setFailedTrack(null);
         try {
             await SpotifyStore.playTrack(track.uri);
             setOpen(false);
-        } catch {
-            SpotifyStore.openExternal(`/track/${track.id}`);
-            setError("O Spotify não autorizou tocar aqui. A faixa foi aberta no Spotify.");
+        } catch (cause) {
+            setFailedTrack(track);
+            setError(cause instanceof Error ? cause.message : "O Spotify não conseguiu iniciar essa música. Verifique o dispositivo e a conta Premium.");
         }
     }
 
@@ -115,7 +119,12 @@ export function MusicSearch() {
                 <div className="vc-spotify-search-status" role="status" aria-live="polite">
                     {error || (loading ? "Buscando..." : query.trim().length < 2 ? "Digite pelo menos duas letras." : tracks.length === 0 ? "Nenhuma música encontrada." : tracks.length < total ? "Desça para ver mais." : "")}
                 </div>
-                {error && query.trim().length >= 2 && <button
+                {failedTrack && <button
+                    type="button"
+                    className="vc-spotify-search-external"
+                    onClick={() => SpotifyStore.openExternal(`/track/${failedTrack.id}`)}
+                >Abrir música no Spotify</button>}
+                {error && !failedTrack && query.trim().length >= 2 && <button
                     type="button"
                     className="vc-spotify-search-external"
                     onClick={() => SpotifyStore.openExternal(`/search/${encodeURIComponent(query.trim())}`)}

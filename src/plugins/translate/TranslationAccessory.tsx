@@ -17,10 +17,11 @@
 */
 
 import { Message } from "@vencord/discord-types";
-import { Parser, useEffect, useState } from "@webpack/common";
+import { Parser, useEffect, UserStore, useState } from "@webpack/common";
 
+import { settings } from "./settings";
 import { TranslateIcon } from "./TranslateIcon";
-import { cl, TranslationValue } from "./utils";
+import { cl, translate, TranslationValue } from "./utils";
 
 interface TranslationSetter {
     messageId: string;
@@ -28,6 +29,30 @@ interface TranslationSetter {
 }
 
 const TranslationSetters = new Set<TranslationSetter>();
+const automaticTranslations = new Map<string, Promise<TranslationValue>>();
+const translationQueue: (() => void)[] = [];
+let activeTranslations = 0;
+
+function scheduleTranslation(key: string, content: string) {
+    const existing = automaticTranslations.get(key);
+    if (existing) return existing;
+
+    const request = new Promise<TranslationValue>((resolve, reject) => {
+        const run = () => {
+            activeTranslations++;
+            void translate("received", content).then(resolve, reject).finally(() => {
+                activeTranslations--;
+                translationQueue.shift()?.();
+            });
+        };
+        if (activeTranslations < 3) run();
+        else translationQueue.push(run);
+    });
+    automaticTranslations.set(key, request);
+    if (automaticTranslations.size > 200) automaticTranslations.delete(automaticTranslations.keys().next().value!);
+    void request.catch(() => automaticTranslations.delete(key));
+    return request;
+}
 
 export function handleTranslate(messageId: string, data: TranslationValue) {
     for (const setter of TranslationSetters) {
@@ -50,6 +75,7 @@ function Dismiss({ onDismiss }: { onDismiss: () => void; }) {
 
 export function TranslationAccessory({ message }: { message: Message; }) {
     const [translation, setTranslation] = useState<TranslationValue>();
+    const { autoTranslateReceived, receivedInput, receivedOutput } = settings.use(["autoTranslateReceived", "receivedInput", "receivedOutput"]);
 
     useEffect(() => {
         // Ignore MessageLinkEmbeds messages
@@ -62,7 +88,17 @@ export function TranslationAccessory({ message }: { message: Message; }) {
 
         TranslationSetters.add(setter);
         return () => void TranslationSetters.delete(setter);
-    }, []);
+    }, [message.id]);
+
+    useEffect(() => {
+        if (!autoTranslateReceived || !message.content || message.author?.id === UserStore.getCurrentUser()?.id) return;
+        let active = true;
+        const key = `${message.id}:${receivedInput}:${receivedOutput}:${message.content}`;
+        void scheduleTranslation(key, message.content).then(result => {
+            if (active) setTranslation(result);
+        }).catch(() => {});
+        return () => { active = false; };
+    }, [autoTranslateReceived, receivedInput, receivedOutput, message.id, message.content]);
 
     if (!translation) return null;
 
@@ -71,7 +107,7 @@ export function TranslationAccessory({ message }: { message: Message; }) {
             <TranslateIcon width={16} height={16} className={cl("accessory-icon")} />
             {Parser.parse(translation.text)}
             <br />
-            (translated from {translation.sourceLanguage} - <Dismiss onDismiss={() => setTranslation(undefined)} />)
+            (traduzido de {translation.sourceLanguage} - <Dismiss onDismiss={() => setTranslation(undefined)} />)
         </span>
     );
 }

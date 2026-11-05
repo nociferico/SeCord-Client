@@ -25,25 +25,25 @@ import { openTranslateModal } from "./TranslateModal";
 export const settings = definePluginSettings({
     receivedInput: {
         type: OptionType.STRING,
-        description: "Language incoming messages are translated from",
+        description: "Idioma das mensagens recebidas (recomendado: detectar automaticamente)",
         default: "auto",
         hidden: true
     },
     receivedOutput: {
         type: OptionType.STRING,
-        description: "Language incoming messages are translated to",
+        description: "Traduzir mensagens recebidas para",
         default: "en",
         hidden: true
     },
     sentInput: {
         type: OptionType.STRING,
-        description: "Language your messages are translated from",
+        description: "Idioma das suas mensagens",
         default: "auto",
         hidden: true
     },
     sentOutput: {
         type: OptionType.STRING,
-        description: "Language your messages are translated to",
+        description: "Traduzir suas mensagens para",
         default: "en",
         hidden: true
     },
@@ -72,8 +72,13 @@ export const settings = definePluginSettings({
     },
     autoTranslate: {
         type: OptionType.BOOLEAN,
-        description: "Automatically translate your messages before sending. You can also Shift+click or right-click the translate button to toggle this",
+        description: "Traduzir automaticamente suas mensagens antes de enviar. Shift + clique no botão de tradução também alterna esta opção.",
         default: false
+    },
+    autoTranslateReceived: {
+        type: OptionType.BOOLEAN,
+        description: "Traduzir automaticamente as mensagens recebidas que aparecerem na conversa. O texto original continua visível.",
+        default: true
     },
     showAutoTranslateTooltip: {
         type: OptionType.BOOLEAN,
@@ -84,7 +89,7 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <Button onClick={openTranslateModal}>
-                Customize translation languages & Auto-Translate
+                Configurar idiomas e tradução automática
             </Button>
         )
     }

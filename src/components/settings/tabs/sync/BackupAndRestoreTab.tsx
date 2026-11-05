@@ -31,17 +31,16 @@ function BackupAndRestoreTab() {
         <SettingsTab>
             <Flex flexDirection="column" gap="0.5em">
                 <Card variant="warning">
-                    <Heading tag="h4">Warning</Heading>
-                    <Paragraph>Importing a settings file will overwrite your current settings.</Paragraph>
+                    <Heading tag="h4">Atenção</Heading>
+                    <Paragraph>Importar um arquivo substituirá seus ajustes atuais.</Paragraph>
                 </Card>
 
                 <Paragraph size="md" className={Margins.bottom8}>
-                    You can import and export your Vencord settings as a JSON file.
-                    This allows you to easily transfer your settings to another device,
-                    or recover your settings after reinstalling Vencord or Discord.
+                    Você pode importar e exportar seus ajustes do SeCord em um arquivo JSON.
+                    Isso permite levar os ajustes a outro dispositivo ou recuperá-los após reinstalar o SeCord.
                 </Paragraph>
 
-                <Heading tag="h4">Settings Export contains:</Heading>
+                <Heading tag="h4">O arquivo exportado contém:</Heading>
                 <Text size="md" className={Margins.bottom8}>
                     <ul>
                         <li>&mdash; Custom QuickCSS</li>

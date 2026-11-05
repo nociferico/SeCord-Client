@@ -36,6 +36,7 @@ import { AuthenticationStore, ChannelStore, FluxDispatcher, Menu, MessageStore, 
 import overlayStyle from "./deleteStyleOverlay.css?managed";
 import textStyle from "./deleteStyleText.css?managed";
 import { openHistoryModal } from "./HistoryModal";
+import { removeSavedDelete, SavedDeletes, saveDeletedMessage } from "./SavedDeletes";
 
 interface MLMessage extends Message {
     deleted?: boolean;
@@ -69,6 +70,15 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Whether to log deleted messages",
         default: true,
+    },
+    persistDeletes: {
+        type: OptionType.BOOLEAN,
+        description: "Guardar localmente até 500 mensagens apagadas por 30 dias, mesmo após reiniciar o SeCord",
+        default: true,
+    },
+    savedDeletes: {
+        type: OptionType.COMPONENT,
+        component: SavedDeletes,
     },
     collapseDeleted: {
         type: OptionType.BOOLEAN,
@@ -142,6 +152,7 @@ const TOGGLE_DELETE_STYLE_ID = "ml-toggle-style";
  */
 function clearMessageHistory(msg: MLMessage) {
     if (msg.deleted) {
+        void removeSavedDelete(msg.channel_id, msg.id).catch(() => {});
         FluxDispatcher.dispatch({
             type: "MESSAGE_DELETE",
             channelId: msg.channel_id,
@@ -342,6 +353,9 @@ export default definePlugin({
                 if (shouldIgnore) {
                     cache = cache.remove(id);
                 } else {
+                    if (settings.store.persistDeletes) {
+                        void saveDeletedMessage(msg).catch(e => new Logger("MessageLogger").error("Could not save deleted message", e));
+                    }
                     cache = cache.update(id, m => m
                         .set("deleted", true)
                         .set("attachments", m.attachments.map(a => (a.deleted = true, a))));

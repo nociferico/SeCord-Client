@@ -183,19 +183,20 @@ export default definePlugin({
         {
             name: "vencord-debug",
             description: "Send Vencord debug info",
-            predicate: ctx => isPluginDev(UserStore.getCurrentUser()?.id) || isSupportAllowedChannel(ctx.channel),
+            predicate: ctx => !IS_VESKTOP && (isPluginDev(UserStore.getCurrentUser()?.id) || isSupportAllowedChannel(ctx.channel)),
             execute: async () => ({ content: await generateDebugInfoMessage() })
         },
         {
             name: "vencord-plugins",
             description: "Send Vencord plugin list",
-            predicate: ctx => isPluginDev(UserStore.getCurrentUser()?.id) || isSupportAllowedChannel(ctx.channel),
+            predicate: ctx => !IS_VESKTOP && (isPluginDev(UserStore.getCurrentUser()?.id) || isSupportAllowedChannel(ctx.channel)),
             execute: () => ({ content: generatePluginList() })
         }
     ],
 
     flux: {
         async CHANNEL_SELECT({ channelId }) {
+            if (IS_VESKTOP) return;
             const isSupportChannel = channelId === SUPPORT_CHANNEL_ID || ChannelStore.getChannel(channelId)?.parent_id === SUPPORT_CATEGORY_ID;
             if (!isSupportChannel) return;
 
@@ -262,6 +263,7 @@ export default definePlugin({
     },
 
     renderMessageAccessory(props) {
+        if (IS_VESKTOP) return null;
         if (props.message.vencordEmbeddedBy) return null;
 
         const buttons = [] as JSX.Element[];
@@ -323,6 +325,7 @@ export default definePlugin({
     },
 
     renderContributorDmWarningCard: ErrorBoundary.wrap(({ channel }) => {
+        if (IS_VESKTOP) return null;
         const userId = channel.getRecipientId();
         if (!isPluginDev(userId)) return null;
         if (RelationshipStore.isFriend(userId) || isPluginDev(UserStore.getCurrentUser()?.id)) return null;

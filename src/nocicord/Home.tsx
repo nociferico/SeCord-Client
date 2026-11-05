@@ -128,7 +128,7 @@ export function NociCordHome() {
                 </div>
             </section>
 
-            <footer className="vc-nocicord-credit">Criado sobre o código aberto do Vencord. Créditos e licença no arquivo README.</footer>
+            <footer className="vc-nocicord-credit">SeCord é um projeto de código aberto. Créditos e licença estão no repositório.</footer>
         </div>
     );
 }

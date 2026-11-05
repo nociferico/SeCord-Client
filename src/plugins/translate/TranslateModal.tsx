@@ -33,7 +33,12 @@ function LanguageSelect({ settingsKey, includeAuto }: { settingsKey: typeof Lang
 
     const options = useMemo(
         () => {
-            const options = Object.entries(getLanguages()).map(([value, label]) => ({ value, label }));
+            const names = new Intl.DisplayNames(["pt-BR"], { type: "language" });
+            const options = Object.entries(getLanguages()).map(([value, label]) => {
+                if (value === "auto") return { value, label: "Detectar automaticamente" };
+                try { return { value, label: names.of(value) || label }; }
+                catch { return { value, label }; }
+            });
             if (!includeAuto)
                 options.shift();
 
@@ -50,7 +55,7 @@ function LanguageSelect({ settingsKey, includeAuto }: { settingsKey: typeof Lang
             <SearchableSelect
                 options={options}
                 value={options.find(o => o.value === currentValue)?.value}
-                placeholder="Select a language"
+                placeholder="Selecione um idioma"
                 maxVisibleItems={5}
                 closeOnSelect={true}
                 onChange={v => settings.store[settingsKey] = v}
@@ -64,10 +69,24 @@ function AutoTranslateToggle() {
 
     return (
         <FormSwitch
-            title="Auto Translate"
+            title="Traduzir mensagens enviadas"
             description={settings.def.autoTranslate.description}
             value={value}
             onChange={v => settings.store.autoTranslate = v}
+            hideBorder
+        />
+    );
+}
+
+function AutoTranslateReceivedToggle() {
+    const value = settings.use(["autoTranslateReceived"]).autoTranslateReceived;
+
+    return (
+        <FormSwitch
+            title="Traduzir mensagens recebidas"
+            description={settings.def.autoTranslateReceived.description}
+            value={value}
+            onChange={v => settings.store.autoTranslateReceived = v}
             hideBorder
         />
     );
@@ -78,7 +97,7 @@ function TranslateModal({ rootProps }: { rootProps: RenderModalProps; }) {
     return (
         <Modal
             {...rootProps}
-            title="Translate"
+            title="Tradução"
         >
             {LanguageSettingKeys.map(s => (
                 <LanguageSelect
@@ -91,6 +110,7 @@ function TranslateModal({ rootProps }: { rootProps: RenderModalProps; }) {
             <Divider className={Margins.bottom16} />
 
             <AutoTranslateToggle />
+            <AutoTranslateReceivedToggle />
         </Modal>
     );
 }

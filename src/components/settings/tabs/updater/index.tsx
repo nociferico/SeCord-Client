@@ -44,19 +44,19 @@ function VesktopSection() {
     return (
         <Flex className={Margins.bottom20} flexDirection="column" gap="1em">
             <Card variant="info">
-                <Heading className={Margins.bottom8}>Vesktop & Vencord</Heading>
-                <Paragraph>Vesktop and Vencord are two separate things. This updater is for Vencord.</Paragraph>
+                <Heading className={Margins.bottom8}>Aplicativo e extensões</Heading>
+                <Paragraph>O aplicativo e as extensões são atualizados separadamente.</Paragraph>
                 <Paragraph className={Margins.top8}>
-                    You receive separate popups for Vesktop updates. You can also manually update by installing the <Link href="https://vesktop.dev/install">latest version</Link>.
+                    As atualizações do aplicativo aparecem em avisos próprios. Você também pode instalar a <Link href="https://github.com/nociferico/SeCord-Desktop/releases/latest">versão mais recente</Link>.
                 </Paragraph>
             </Card>
 
             {isVesktopOutdated && (
                 <Card variant="warning">
-                    <Heading className={Margins.bottom8}>Vesktop Outdated</Heading>
+                    <Heading className={Margins.bottom8}>SeCord desatualizado</Heading>
                     <Flex flexDirection="column" gap="0.5em">
-                        <Paragraph>Your version of Vesktop is outdated!</Paragraph>
-                        <Button variant="link" onClick={() => VesktopNative.app.openUpdater()}>Open Vesktop Updater</Button>
+                        <Paragraph>Há uma versão mais recente do SeCord.</Paragraph>
+                        <Button variant="link" onClick={() => VesktopNative.app.openUpdater()}>Abrir atualização do SeCord</Button>
                     </Flex>
                 </Card>
             )}
@@ -84,14 +84,14 @@ function Updater() {
             <div className="vc-settings-switches">
                 <FormSwitch
                     title="Automatically update"
-                    description="Automatically update Vencord without confirmation prompt"
+                    description="Atualizar as extensões do SeCord automaticamente"
                     value={settings.autoUpdate}
                     onChange={(v: boolean) => settings.autoUpdate = v}
                     hideBorder
                 />
                 <FormSwitch
                     title="Get notified when an automatic update completes"
-                    description="Show a notification when Vencord automatically updates"
+                    description="Mostrar aviso quando as extensões do SeCord forem atualizadas"
                     value={settings.autoUpdateNotification}
                     onChange={(v: boolean) => settings.autoUpdateNotification = v}
                     disabled={!settings.autoUpdate}

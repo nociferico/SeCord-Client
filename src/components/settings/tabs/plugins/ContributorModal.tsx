@@ -91,7 +91,7 @@ function ContributorModal({ user, modalProps }: { user: User; modalProps: Render
                     )
                     : (
                         <Paragraph>
-                            This person has not made any plugins. They likely {ContributedHyperLink} to Vencord in other ways!
+                            Esta pessoa não criou extensões. Talvez tenha {ContributedHyperLink} de outras formas ao projeto de origem.
                         </Paragraph>
                     )
             }

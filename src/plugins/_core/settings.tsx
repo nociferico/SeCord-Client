@@ -89,7 +89,7 @@ interface SettingsLayoutBuilder {
 const settings = definePluginSettings({
     settingsLocation: {
         type: OptionType.SELECT,
-        description: "Where to put the NociCord settings section",
+        description: "Where to put the SeCord settings section",
         options: [
             { label: "At the very top", value: "top" },
             { label: "Above the Nitro section", value: "aboveNitro", default: true },
@@ -179,8 +179,8 @@ export default definePlugin({
         const vencordEntries: SettingsLayoutNode[] = [
             buildEntry({
                 key: "vencord_main",
-                title: "NociCord",
-                panelTitle: "NociCord Settings",
+                title: "SeCord",
+                panelTitle: "SeCord (SoulEater)",
                 Component: VencordTab,
                 Icon: NociCordIcon
             }),
@@ -198,15 +198,15 @@ export default definePlugin({
             }),
             !IS_UPDATER_DISABLED && UpdaterTab && buildEntry({
                 key: "vencord_updater",
-                title: "Updater",
-                panelTitle: "Vencord Updater",
+                title: "Atualizações",
+                panelTitle: "Atualizações do SeCord",
                 Component: UpdaterTab,
                 Icon: UpdaterIcon
             }),
             buildEntry({
                 key: "vencord_cloud",
                 title: "Sincronização",
-                panelTitle: "Sincronização do Vencord",
+                panelTitle: "Sincronização do SeCord",
                 Component: CloudTab,
                 Icon: CloudIcon
             }),
@@ -240,7 +240,7 @@ export default definePlugin({
         const vencordSection: SettingsLayoutNode = {
             key: "vencord_section",
             type: LayoutTypes.SECTION,
-            useTitle: () => "NociCord Settings",
+            useTitle: () => "SeCord (SoulEater)",
             buildLayout: () => vencordEntries
         };
 
@@ -291,7 +291,7 @@ export default definePlugin({
     get additionalInfo() {
         if (IS_DEV) return " (Dev)";
         if (IS_WEB) return " (Web)";
-        if (IS_VESKTOP) return ` (Vesktop v${VesktopNative.app.getVersion()})`;
+        if (IS_VESKTOP) return ` (SeCord v${VesktopNative.app.getVersion()})`;
         if (IS_STANDALONE) return " (Standalone)";
         return "";
     },
@@ -299,7 +299,7 @@ export default definePlugin({
     getInfoRows() {
         const { electronVersion, chromiumVersion, additionalInfo } = this;
 
-        const rows = [`NociCord (Vencord base) ${gitHash}${additionalInfo}`];
+        const rows = [`SeCord (SoulEater) ${gitHash}${additionalInfo}`];
 
         if (electronVersion) rows.push(`Electron ${electronVersion}`);
         if (chromiumVersion) rows.push(`Chromium ${chromiumVersion}`);
